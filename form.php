@@ -7,12 +7,26 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
-
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<div class="container-fluid">
+<a class="navbar-brand" href="#">Portfolio Builder</a>
+<div>
+<ul class="navbar-nav">
+<li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+<li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
+<li class="nav-item"><a class="nav-link" href="Education.php">Education</a></li>
+<li class="nav-item"><a class="nav-link" href="progects.php">progects</a></li>
+<li class="nav-item"><a class="nav-link" href="form.php">Form</a></li>
+<li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
+</ul>
+</div>
+</div>
+</nav>
 <div class="container py-5">
   <div class="row justify-content-center">
     <div class="col-lg-6 col-md-8 col-sm-10">
       
-      <h2 class="mb-4 text-center">Add Entry</h2>
+      <h2 class="mb-4 text-center">My Progects</h2>
 
       <?php
       include 'config.php';

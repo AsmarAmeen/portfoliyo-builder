@@ -8,7 +8,23 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<div class="container-fluid">
+<a class="navbar-brand" href="#">Portfolio Builder</a>
+<div>
+<ul class="navbar-nav">
+<li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+<li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
+<li class="nav-item"><a class="nav-link" href="Education.php">Education</a></li>
+<li class="nav-item"><a class="nav-link" href="progects.php">progects</a></li>
+<li class="nav-item"><a class="nav-link" href="form.php">Form</a></li>
 
+<li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
+<li class="nav-item"><a class="nav-link" href="view.php">View</a></li>
+</ul>
+</div>
+</div>
+</nav>
   <!-- About Section -->
   <section class="py-5 bg-light">
     <div class="container">

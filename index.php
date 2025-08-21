@@ -14,8 +14,10 @@
 <div>
 <ul class="navbar-nav">
 <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-<li class="nav-item"><a class="nav-link" href="form.php">Form</a></li>
 <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
+<li class="nav-item"><a class="nav-link" href="Education.php">Education</a></li>
+<li class="nav-item"><a class="nav-link" href="progects.php">progects</a></li>
+<li class="nav-item"><a class="nav-link" href="form.php">Form</a></li>
 <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
 </ul>
 </div>
