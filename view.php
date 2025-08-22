@@ -13,7 +13,10 @@ $result =$conn->query($sql);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+    <form method="GET" class="mb-3">
+<input type="text" name="search" class="form-control" placeholder="Search by Name or Email" value="<?php if(isset($_GET['search'])) echo $_GET['search']; ?>">
 
+<br>
     <table class="table table-bordered table-striped">
         <thead >
             <tr>
@@ -28,6 +31,9 @@ $result =$conn->query($sql);
 
         <tbody>
             <?php
+            $search = isset($_GET['search']) ? $_GET['search'] : '';
+$sql = "SELECT * FROM Form WHERE name LIKE '%$search%' OR email LIKE '%$search%' ORDER BY id DESC";
+$result = $conn->query($sql);
 
             if($result->num_rows>0){
                 while($row = $result->fetch_assoc()){
@@ -37,9 +43,13 @@ $result =$conn->query($sql);
                     <td>{$row['name']}</td>
                     <td>{$row['email']}</td>
                     <td>{$row['phone']}</td>
-                    <td>{$row['created_at']}</td>
-                    
-                    </tr>";
+                    <td>
+                    <a href='form.php?edit={$row['id']}' class='btn btn-primary btn-sm'>Edit</a>
+                    <a href='delete.php?id={$row['id']}' class='btn btn-danger btn-sm' onclick=\"return confirm('Are you sure you want to delete this entry?');\">Delete</a>
+                    </td>
+                 
+                 
+                           </tr>";
 
 
                 }
@@ -47,9 +57,15 @@ $result =$conn->query($sql);
             else{
                     echo "<tr><td colspan='5'>No entries found</td></tr>";
 }
+
+
 ?>
 </tbody>
 </table>
+</form>
+
+
+
 </div>
 
 

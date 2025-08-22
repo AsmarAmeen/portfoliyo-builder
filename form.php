@@ -1,3 +1,45 @@
+<?php include("config.php"); 
+
+
+// Handle update form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST")  {
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+     $email = $_POST['email'];
+    $phone = $_POST['phone'];
+
+        if (isset($_POST['id']) && !empty($_POST['id'])) {
+          // Update
+          $id = $_POST['id'];
+    $sql = "UPDATE Form SET name=?, email=?, phone=? WHERE id=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sssi", $name, $email, $phone, $id);
+    $stmt->execute();
+
+    header("Location: view.php");
+    exit;
+
+     } else {
+        // Insert
+        $sql = "INSERT INTO Form (name, email, phone) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sss", $name, $email, $phone);
+        $stmt->execute();
+    }
+  }
+
+// If edit button clicked, get task data
+$editTask = null;
+if (isset($_GET['edit'])) {
+    $id = $_GET['edit'];
+    $result = $conn->query("SELECT * FROM Form WHERE id = $id");
+    $editTask = $result->fetch_assoc();
+}
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,25 +111,32 @@
       ?>
 
       <form method="POST" action="" onsubmit="return validateForm()">
-        <div class="mb-3">
-          <label class="form-label">Name</label>
-          <input type="text" id="name" class="form-control" name="name" placeholder="Enter Name">
-        </div>
+       <input type="hidden" name="id" value="<?php echo $editTask['id'] ?? ''; ?>">
 
-        <div class="mb-3">
-          <label class="form-label">Email</label>
-          <input type="email" id="email" class="form-control" name="email" placeholder="Enter Email">
-        </div>
+          <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input type="text" id="name" class="form-control" name="name" placeholder="Enter Name"
+                  value="<?php echo $editTask['name'] ?? ''; ?>">
+          </div>
 
-        <div class="mb-3">
-          <label class="form-label">Phone</label>
-          <input type="text" id="phone" class="form-control" name="phone" placeholder="Enter Phone">
-        </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" id="email" class="form-control" name="email" placeholder="Enter Email"
+                  value="<?php echo $editTask['email'] ?? ''; ?>">
+          </div>
 
-        <div class="d-grid gap-2">
-          <button type="submit" class="btn btn-success">Submit</button>
-          <button type="reset" class="btn btn-secondary">Clear Form</button>
-        </div>
+          <div class="mb-3">
+            <label class="form-label">Phone</label>
+            <input type="text" id="phone" class="form-control" name="phone" placeholder="Enter Phone"
+                  value="<?php echo $editTask['phone'] ?? ''; ?>">
+          </div>
+
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-success">
+              <?php echo isset($editTask) ? "Update" : "Submit"; ?>
+            </button>
+            <button type="reset" class="btn btn-secondary">Clear Form</button>
+          </div>
       </form>
 
     </div>
