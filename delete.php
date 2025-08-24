@@ -3,7 +3,7 @@ include("config.php");
 
 $id = $_GET['id'];
 
-$sql = "DELETE FROM Form WHERE id=?";
+$sql = "DELETE FROM progects WHERE id=?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id);
 

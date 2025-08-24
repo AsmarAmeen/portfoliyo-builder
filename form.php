@@ -5,15 +5,15 @@
 if ($_SERVER["REQUEST_METHOD"] == "POST")  {
     $id = $_POST['id'];
     $name = $_POST['name'];
-     $email = $_POST['email'];
-    $phone = $_POST['phone'];
+     $description = $_POST['description'];
+    $stack = $_POST['stack'];
 
         if (isset($_POST['id']) && !empty($_POST['id'])) {
           // Update
           $id = $_POST['id'];
-    $sql = "UPDATE Form SET name=?, email=?, phone=? WHERE id=?";
+    $sql = "UPDATE progects SET name=?, description=?, stack=? WHERE id=?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssi", $name, $email, $phone, $id);
+    $stmt->bind_param("sssi", $name, $description, $stack, $id);
     $stmt->execute();
 
     header("Location: view.php");
@@ -21,9 +21,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")  {
 
      } else {
         // Insert
-        $sql = "INSERT INTO Form (name, email, phone) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO progects (name, description, stack) VALUES (?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sss", $name, $email, $phone);
+        $stmt->bind_param("sss", $name, $description, $stack);
         $stmt->execute();
     }
   }
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")  {
 $editTask = null;
 if (isset($_GET['edit'])) {
     $id = $_GET['edit'];
-    $result = $conn->query("SELECT * FROM Form WHERE id = $id");
+    $result = $conn->query("SELECT * From progects WHERE id = $id");
     $editTask = $result->fetch_assoc();
 }
 ?>
@@ -56,10 +56,10 @@ if (isset($_GET['edit'])) {
 <ul class="navbar-nav">
 <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
 <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
-<li class="nav-item"><a class="nav-link" href="Education.php">Education</a></li>
-<li class="nav-item"><a class="nav-link" href="progects.php">progects</a></li>
 <li class="nav-item"><a class="nav-link" href="form.php">Form</a></li>
+<li class="nav-item"><a class="nav-link" href="view.php">Progects</a></li>
 <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
+
 </ul>
 </div>
 </div>
@@ -70,65 +70,27 @@ if (isset($_GET['edit'])) {
       
       <h2 class="mb-4 text-center">My Progects</h2>
 
-      <?php
-      include 'config.php';
-
-      $alertMsg = $alertClass = "";
-
-      if ($_SERVER["REQUEST_METHOD"] == "POST") {
-          $name  = trim($_POST['name']);
-          $email = trim($_POST['email']);
-          $phone = trim($_POST['phone']);
-
-          if (empty($name) || empty($email) || empty($phone)) {
-              $alertMsg = "All fields are required!";
-              $alertClass = "alert-danger";
-          } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-              $alertMsg = "Invalid email format!";
-              $alertClass = "alert-danger";
-          } elseif (!is_numeric($phone) || strlen($phone) != 10) {
-              $alertMsg = "Phone must be 10 digits!";
-              $alertClass = "alert-danger";
-          } else {
-              $sql = "INSERT INTO Form (name, email, phone) VALUES ('$name','$email','$phone')";
-              if ($conn->query($sql) === TRUE) {
-                  $alertMsg = "Entry added successfully!";
-                  $alertClass = "alert-success";
-              } else {
-                  $alertMsg = "Error: " . $sql . "<br>" . $conn->error;
-                  $alertClass = "alert-danger";
-              }
-          }
-          $conn->close();
-
-          if ($alertMsg != "") {
-              echo "<div class='alert $alertClass alert-dismissible fade show' role='alert'>
-                      $alertMsg
-                      <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-                    </div>";
-          }
-      }
-      ?>
 
       <form method="POST" action="" onsubmit="return validateForm()">
        <input type="hidden" name="id" value="<?php echo $editTask['id'] ?? ''; ?>">
 
           <div class="mb-3">
-            <label class="form-label">Name</label>
-            <input type="text" id="name" class="form-control" name="name" placeholder="Enter Name"
+            <label class="form-label">Progect Title</label>
+            <input type="text" id="name" name="name" class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="Enter Name"
+           
                   value="<?php echo $editTask['name'] ?? ''; ?>">
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input type="email" id="email" class="form-control" name="email" placeholder="Enter Email"
-                  value="<?php echo $editTask['email'] ?? ''; ?>">
+            <label class="form-label">Progect Description</label>
+            <input type="description" id="description" class="form-control" name="description" placeholder="Enter Description"
+                  value="<?php echo $editTask['description'] ?? ''; ?>">
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Phone</label>
-            <input type="text" id="phone" class="form-control" name="phone" placeholder="Enter Phone"
-                  value="<?php echo $editTask['phone'] ?? ''; ?>">
+            <label class="form-label">Teck stack</label>
+            <input type="text" id="stack" class="form-control" name="stack" placeholder="Enter stack"
+                  value="<?php echo $editTask['stack'] ?? ''; ?>">
           </div>
 
           <div class="d-grid gap-2">
@@ -146,22 +108,18 @@ if (isset($_GET['edit'])) {
 <script>
 function validateForm() {
     let name  = document.getElementById("name").value.trim();
-    let email = document.getElementById("email").value.trim();
-    let phone = document.getElementById("phone").value.trim();
+    let description = document.getElementById("description").value.trim();
+    let stack = document.getElementById("stack").value.trim();
 
-    if (name === "" || email === "" || phone === "") { 
+    if (name === "" || description === "" || stack === "") { 
         showAlert("All fields required!", "danger");
         return false; 
     }
-    if (!email.includes("@")) { 
-        showAlert("Invalid email!", "danger");
-        return false; 
-    }
-    if (phone.length !== 10 || isNaN(phone)) { 
-        showAlert("Phone must be 10 digits!", "danger");
-        return false; 
-    }
+
+    showAlert("Form submitted successfully!", "success");
+   
     return true;
+  
 }
 
 function showAlert(message, type) {
@@ -171,7 +129,25 @@ function showAlert(message, type) {
     alertDiv.role = "alert";
     alertDiv.innerHTML = `${message} <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>`;
     container.insertBefore(alertDiv, container.firstChild);
+   setTimeout(() => {
+        const bsAlert = bootstrap.Alert.getOrCreateInstance(alertDiv);
+        bsAlert.close();
+    }, 5000);
+  
 }
+
+
+
+document.getElementById("name").addEventListener("input", function() {
+    let name = this.value;
+    if(name.length < 3){
+    this.style.borderColor = "red";
+    } else {
+    this.style.borderColor = "green";
+    }
+});
+
+
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
